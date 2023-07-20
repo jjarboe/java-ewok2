@@ -63,14 +63,14 @@ jobs:
         shell: bash
         run: ./.github/scripts/download-endorctl.sh
       - name: Generate SBOM
-        run: endorctl export-sbom --package-version-name "mvn://com.visualpathit:vprofile@v2" --api-key ${{ secrets.ENDOR_API_CREDENTIALS_KEY }} --api-secret ${{ secrets.ENDOR_API_CREDENTIALS_SECRET }} --namespace ${{ secrets.ENDOR_NAMESPACE }} > target/sbom-${{ github.sha }}.cdx.json
+        run: endorctl export-sbom --verbose --package-version-name "mvn://com.visualpathit:vprofile@v2" --api-key ${{ secrets.ENDOR_API_CREDENTIALS_KEY }} --api-secret ${{ secrets.ENDOR_API_CREDENTIALS_SECRET }} --namespace ${{ secrets.ENDOR_NAMESPACE }} > target/sbom-${{ github.sha }}.cdx.json
       - name: Save SBOM artifact
         uses: actions/upload-artifact@v3
         with:
           name: sbom-file
           path: target/sbom-${{ github.sha }}.cdx.json
       - name: Generate VEX
-        run: endorctl export-vex --package-version-name "mvn://com.visualpathit:vprofile@v2" --api-key ${{ secrets.ENDOR_API_CREDENTIALS_KEY }} --api-secret ${{ secrets.ENDOR_API_CREDENTIALS_SECRET }} --namespace ${{ secrets.ENDOR_NAMESPACE }} > target/vex-${{ github.sha }}.cdx.json
+        run: endorctl export-vex --verbose --package-version-name "mvn://com.visualpathit:vprofile@v2" --api-key ${{ secrets.ENDOR_API_CREDENTIALS_KEY }} --api-secret ${{ secrets.ENDOR_API_CREDENTIALS_SECRET }} --namespace ${{ secrets.ENDOR_NAMESPACE }} > target/vex-${{ github.sha }}.cdx.json
       - name: Save VEX artifact
         uses: actions/upload-artifact@v3
         with:
