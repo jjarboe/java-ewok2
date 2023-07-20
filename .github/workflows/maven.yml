@@ -52,7 +52,7 @@ jobs:
           api_secret: ${{ secrets.ENDOR_API_CREDENTIALS_SECRET }}
           enable_github_action_token: "false"
           scan_summary_output_type: "table"
-          ci_run: "true"
+          ci_run: "false"
           sarif_file: target/endor-findings-${{ github.sha }}.sarif
 
       - name: Upload findings to GitHub
