@@ -42,7 +42,7 @@ jobs:
           enable_github_action_token: "false"
           scan_summary_output_type: "table"
           ci_run: "true"
-          sarif_file: target/endor-findings-${{ github.sha }}.sarif
+          sarif_file: endor-findings.sarif
       - name: Endor Labs Scan Push to main
         if: github.event_name == 'push'
         uses: endorlabs/github-action@main
@@ -53,26 +53,26 @@ jobs:
           enable_github_action_token: "false"
           scan_summary_output_type: "table"
           ci_run: "false"
-          sarif_file: target/endor-findings-${{ github.sha }}.sarif
+          sarif_file: endor-findings.sarif
 
       - name: Upload findings to GitHub
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: target/endor-findings-${{ github.sha }}.sarif
+          sarif_file: endor-findings.sarif
       - name: Get endorctl binary
         shell: bash
         run: ./.github/scripts/download-endorctl.sh
       - name: Generate SBOM
-        run: endorctl export-sbom --verbose --package-version-name "mvn://com.visualpathit:vprofile@v2" --api-key ${{ secrets.ENDOR_API_CREDENTIALS_KEY }} --api-secret ${{ secrets.ENDOR_API_CREDENTIALS_SECRET }} --namespace ${{ secrets.ENDOR_NAMESPACE }} > target/sbom-${{ github.sha }}.cdx.json
+        run: endorctl export-sbom --package-version-name "mvn://com.visualpathit:vprofile@v2" --api-key ${{ secrets.ENDOR_API_CREDENTIALS_KEY }} --api-secret ${{ secrets.ENDOR_API_CREDENTIALS_SECRET }} --namespace ${{ secrets.ENDOR_NAMESPACE }} > sbom.cdx.json
       - name: Save SBOM artifact
         uses: actions/upload-artifact@v3
         with:
-          name: sbom-file
-          path: target/sbom-${{ github.sha }}.cdx.json
+          name: sbom.cdx.json
+          path: sbom.cdx.json
       - name: Generate VEX
-        run: endorctl export-vex --verbose --package-version-name "mvn://com.visualpathit:vprofile@v2" --api-key ${{ secrets.ENDOR_API_CREDENTIALS_KEY }} --api-secret ${{ secrets.ENDOR_API_CREDENTIALS_SECRET }} --namespace ${{ secrets.ENDOR_NAMESPACE }} > target/vex-${{ github.sha }}.cdx.json
+        run: endorctl export-vex --verbose --package-version-name "mvn://com.visualpathit:vprofile@v2" --api-key ${{ secrets.ENDOR_API_CREDENTIALS_KEY }} --api-secret ${{ secrets.ENDOR_API_CREDENTIALS_SECRET }} --namespace ${{ secrets.ENDOR_NAMESPACE }} > vex.cdx.json
       - name: Save VEX artifact
         uses: actions/upload-artifact@v3
         with:
-          name: vex-file
-          path: target/vex-${{ github.sha }}.cdx.json
+          name: vex.cdx.json
+          path: vex.cdx.json
